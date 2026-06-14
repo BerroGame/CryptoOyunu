@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoTycoon - Sahte Milyoner Simülatörü</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0e14;
+            color: #e2e8f0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: table;
+            width: 100%;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 15px;
+        }
+
+        .header-title {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .stats-bar {
+            display: table-cell;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        .stat-box {
+            display: inline-block;
+            background: #161b26;
+            border: 1px solid #2d3748;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-left: 15px;
+            text-align: left;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .stat-value.green { color: #00ff88; }
+        .stat-value.gold { color: #ffcc00; }
+
+        .main-grid {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: separate;
+            border-spacing: 20px 0;
+        }
+
+        .col-left { display: table-cell; width: 65%; vertical-align: top; }
+        .col-right { display: table-cell; width: 35%; vertical-align: top; }
+
+        .panel {
+            background: #111622;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #f8fafc;
+            border-left: 4px solid #00ffcc;
+            padding-left: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            color: #64748b;
+            font-size: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1e293b;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px 0;
+            border-bottom: 1px solid #161b26;
+            font-size: 14px;
+        }
+
+        tr.selected-row {
+            background: rgba(0, 255, 204, 0.05);
+        }
+
+        tr.crypto-row {
+            cursor: pointer;
+        }
+
+        tr.crypto-row:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .coin-name { font-weight: bold; color: #fff; }
+        .coin-symbol {
+            font-size: 11px;
+            color: #64748b;
+            background: #1e293b;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+
+        .price-up { color: #00ff88; font-weight: 500; }
+        .price-down { color: #ff3366; font-weight: 500; }
+
+        .trade-coin-info {
+            background: #161b26;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .trade-coin-title { font-size: 18px; font-weight: bold; color: #00ffcc; }
+
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
+        .input-group input {
+            width: 100%;
+            background: #161b26;
+            border: 1px solid #2d3748;
+            padding: 12px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+        .input-group input:focus { border-color: #00ffcc; }
+
+        .trade-buttons { display: table; width: 100%; border-spacing: 10px 0; }
+        .trade-btn-cell { display: table-cell; width: 50%; }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+        }
+
+        .btn-buy { background: #00ff88; color: #0b0e14; }
+        .btn-sell { background: #ff3366; color: #fff; }
+
+        .portfolio-item {
+            display: table;
+            width: 100%;
+            background: #161b26;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .port-left { display: table-cell; text-align: left; font-weight: bold; }
+        .port-right { display: table-cell; text-align: right; color: #94a3b8; }
+
+        .log-box {
+            background: #080b11;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 10px;
+            height: 120px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            color: #8a99ad;
+        }
+        .log-entry { margin-bottom: 4px; border-left: 2px solid #334155; padding-left: 6px; }
+        .log-success { border-color: #00ff88; color: #a3e635; }
+        .log-danger { border-color: #ff3366; color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-title">
+            <h1>CryptoTycoon</h1>
+            <p>Sanal 100,000$ ile piyasayı altüst et! Fiyatlar her 3 saniyede bir çılgınca değişir.</p>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-label">Toplam Servet (Net Değer)</div>
+                <div class="stat-value gold" id="total-net-worth">$100,000.00</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Kullanılabilir Nakit</div>
+                <div class="stat-value green" id="cash-balance">$100,000.00</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <div class="col-left">
+            <div class="panel">
+                <div class="panel-title">Canlı Kripto Para Piyasası (Seçmek için tıkla)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kripto Para</th>
+                            <th>Anlık Fiyat</th>
+                            <th>Değişim</th>
+                            <th>Cüzdanınız</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crypto-table-body">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">İşlem Geçmişi & Bildirimler</div>
+                <div class="log-box" id="log-box">
+                    <div class="log-entry">Simülatör başlatıldı. Başlangıç bütçesi: 100.000$</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="panel">
+                <div class="panel-title">Hızlı Al-Sat</div>
+                <div class="trade-coin-info">
+                    <div class="trade-coin-title" id="selected-coin-name">Bitcoin (BTC)</div>
+                    <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">
+                        Birim Fiyatı: <span id="selected-coin-price" style="color: #fff; font-weight: bold;">$62,000</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="trade-amount">Miktar (Adet Olarak):</label>
+                    <input type="number" id="trade-amount" min="0" step="any" placeholder="0.00">
+                </div>
+
+                <div class="trade-buttons">
+                    <div class="trade-btn-cell"><button class="btn btn-buy" onclick="executeTrade('BUY')">SATIN AL</button></div>
+                    <div class="trade-btn-cell"><button class="btn btn-sell" onclick="executeTrade('SELL')">SAT DOS</button></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Varlık Dağılımı (Cüzdanınız)</div>
+                <div id="portfolio-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let userCash = 100000.00;
+    let selectedCoinId = 'btc';
+
+    const cryptos = {
+        btc: { name: 'Bitcoin', symbol: 'BTC', price: 62000.00, change: 0, owned: 0, volatility: 0.02 },
+        eth: { name: 'Ethereum', symbol: 'ETH', price: 3400.00, change: 0, owned: 0, volatility: 0.03 },
+        sol: { name: 'Solana', symbol: 'SOL', price: 145.00, change: 0, owned: 0, volatility: 0.06 },
+        doge: { name: 'Dogecoin', symbol: 'DOGE', price: 0.14, change: 0, owned: 0, volatility: 0.12 },
+        elon: { name: 'MarsCoin', symbol: 'ELON', price: 0.005, change: 0, owned: 0, volatility: 0.30 }
+    };
+
+    function formatCurrency(val) {
+        return '$' + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function addLog(text, type = '') {
+        const logBox = document.getElementById('log-box');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        const now = new Date();
+        const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+        entry.innerText = `[${timeStr}] ${text}`;
+        logBox.appendChild(entry);
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function renderMarket() {
+        const tbody = document.getElementById('crypto-table-body');
+        tbody.innerHTML = '';
+
+        for (const [id, coin] of Object.entries(cryptos)) {
+            const tr = document.createElement('tr');
+            tr.className = `crypto-row ${id === selectedCoinId ? 'selected-row' : ''}`;
+            tr.onclick = () => selectCoin(id);
+
+            const changeClass = coin.change >= 0 ? 'price-up' : 'price-down';
+            const changeSign = coin.change >= 0 ? '+' : '';
+
+            tr.innerHTML = `
+                <td><span class="coin-name">${coin.name}</span><span class="coin-symbol">${coin.symbol}</span></td>
+                <td style="font-weight: 600;">${formatCurrency(coin.price)}</td>
+                <td class="${changeClass}">${changeSign}${coin.change.toFixed(2)}%</td>
+                <td style="color: #94a3b8;">${coin.owned > 0 ? (coin.owned.toFixed(4) + ' ' + coin.symbol) : '-'}</td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        const activeCoin = cryptos[selectedCoinId];
+        document.getElementById('selected-coin-name').innerText = `${activeCoin.name} (${activeCoin.symbol})`;
+        document.getElementById('selected-coin-price').innerText = formatCurrency(activeCoin.price);
+    }
+
+    function renderPortfolio() {
+        const portList = document.getElementById('portfolio-list');
+        portList.innerHTML = '';
+        let hasAssets = false;
+
+        for (const [id, coin] of Object.entries(cryptos)) {
+            if (coin.owned > 0) {
+                hasAssets = true;
+                const value = coin.owned * coin.price;
+                const item = document.createElement('div');
+                item.className = 'portfolio-item';
+                item.innerHTML = `<div class="port-left">${coin.name} (${coin.symbol})</div><div class="port-right"><span style="color: #fff; font-weight: bold;">${coin.owned.toFixed(4)}</span> Adet / <span style="color: #00ff88;">${formatCurrency(value)}</span></div>`;
+                portList.appendChild(item);
+            }
+        }
+        if (!hasAssets) {
+            portList.innerHTML = `<div style="color: #64748b; font-size: 13px; text-align: center; padding: 10px;">Henüz hiç kripto paranız yok.</div>`;
+        }
+    }
+
+    function updateBalances() {
+        let cryptoTotalValue = 0;
+        for (const coin of Object.values(cryptos)) {
+            cryptoTotalValue += coin.owned * coin.price;
+        }
+        const netWorth = userCash + cryptoTotalValue;
+        document.getElementById('cash-balance').innerText = formatCurrency(userCash);
+        document.getElementById('total-net-worth').innerText = formatCurrency(netWorth);
+    }
+
+    function selectCoin(id) {
+        selectedCoinId = id;
+        renderMarket();
+    }
+
+    function executeTrade(type) {
+        const amountInput = document.getElementById('trade-amount');
+        const amount = parseFloat(amountInput.value);
+        const coin = cryptos[selectedCoinId];
+
+        if (isNaN(amount) || amount <= 0) {
+            alert('Lütfen geçerli bir miktar girin!');
+            return;
+        }
+
+        const totalCost = amount * coin.price;
+
+        if (type === 'BUY') {
+            if (totalCost > userCash) {
+                alert('Yetersiz nakit bütçe!');
+                addLog(`Yetersiz bütçe nedeniyle ${amount} ${coin.symbol} alınamadı.`, 'log-danger');
+                return;
+            }
+            userCash -= totalCost;
+            coin.owned += amount;
+            addLog(`${amount.toFixed(4)} ${coin.symbol} satın alındı. Maliyet: ${formatCurrency(totalCost)}`, 'log-success');
+        } else if (type === 'SELL') {
+            if (amount > coin.owned) {
+                alert(`Elinizde yeterli ${coin.symbol} yok!`);
+                return;
+            }
+            userCash += totalCost;
+            coin.owned -= amount;
+            addLog(`${amount.toFixed(4)} ${coin.symbol} satıldı. Gelir: ${formatCurrency(totalCost)}`, 'log-danger');
+        }
+
+        amountInput.value = '';
+        updateBalances();
+        renderPortfolio();
+        renderMarket();
+    }
+
+    function simulateMarket() {
+        for (const coin of Object.values(cryptos)) {
+            const changePercent = (Math.random() * 2 - 1) * coin.volatility;
+            coin.price = Math.max(0.0001, coin.price + (coin.price * changePercent));
+            coin.change = changePercent * 100;
+        }
+        renderMarket();
+        renderPortfolio();
+        updateBalances();
+    }
+
+    renderMarket();
+    updateBalances();
+    setInterval(simulateMarket, 3000);
+</script>
+</body>
+  </html>
+  
