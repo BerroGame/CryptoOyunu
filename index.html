@@ -2,496 +2,331 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoTycoon - Mobil Uyumlu Kripto Simülatörü</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Otoyol Macerası: Dikkatli Ol!</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
+            user-select: none;
         }
 
         body {
-            background-color: #0b0e14;
+            background-color: #0d0f14;
             color: #e2e8f0;
-            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            overflow: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Üst Bar - Esnek Düzen */
-        header {
+        /* Telefon Ekranı Simülatörü Kontrolü */
+        .game-container {
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            background: #11141c;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #1e293b;
-            padding-bottom: 15px;
+            border-left: 1px solid #1e293b;
+            border-right: 1px solid #1e293b;
+            position: relative;
         }
 
-        .header-title h1 {
-            font-size: 24px;
-            color: #00ffcc;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
-        }
-
-        .header-title p {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-top: 4px;
-        }
-
-        .stats-bar {
+        /* Üst Bar / Göstergeler */
+        .hud-bar {
             display: flex;
-            gap: 10px;
-            width: 100%;
+            justify-content: space-between;
+            padding: 15px;
+            background: #161b26;
+            border-bottom: 2px solid #1e293b;
         }
 
-        .stat-box {
-            flex: 1;
-            background: #161b26;
-            border: 1px solid #2d3748;
-            padding: 10px;
-            border-radius: 8px;
+        .hud-item {
             text-align: center;
         }
 
-        .stat-label {
+        .hud-label {
             font-size: 11px;
             color: #94a3b8;
             text-transform: uppercase;
-            margin-bottom: 4px;
         }
 
-        .stat-value {
+        .hud-value {
             font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .stat-value.green { color: #00ff88; }
-        .stat-value.gold { color: #ffcc00; }
-
-        /* Ana Grid Sistemi - Mobilde Tek Kolon, Masaüstünde Yan Yana */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        .panel {
-            background: #111622;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            padding: 15px;
-        }
-
-        .panel-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #f8fafc;
-            border-left: 4px solid #00ffcc;
-            padding-left: 10px;
-        }
-
-        /* Kaymayı Önleyen Esnek Liste Tasarımı (Tablo yerine) */
-        .crypto-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .crypto-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #161b26;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .crypto-row:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .crypto-row.selected-row {
-            border-color: #00ffcc;
-            background: rgba(0, 255, 204, 0.05);
-        }
-
-        .coin-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .coin-name {
-            font-weight: bold;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        .coin-symbol {
-            font-size: 10px;
-            color: #64748b;
-            background: #1e293b;
-            padding: 1px 4px;
-            border-radius: 4px;
-            width: max-content;
-        }
-
-        .coin-stats {
-            text-align: right;
-        }
-
-        .coin-price {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .price-up { color: #00ff88; font-size: 12px; }
-        .price-down { color: #ff3366; font-size: 12px; }
-
-        .user-owned {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 2px;
-        }
-
-        /* Al-Sat Paneli */
-        .trade-coin-info {
-            background: #161b26;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .trade-coin-title {
-            font-size: 18px;
             font-weight: bold;
             color: #00ffcc;
         }
 
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 6px;
-        }
-
-        .input-group input {
-            width: 100%;
-            background: #161b26;
-            border: 1px solid #2d3748;
-            padding: 12px;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            -webkit-appearance: none; /* Mobil tarayıcı fix */
-        }
-
-        .input-group input:focus {
-            border-color: #00ffcc;
-        }
-
-        .trade-buttons {
+        /* Akan Yol Animasyonu (CSS Efekti) */
+        .road-viewport {
+            height: 25vh;
+            background: #1f2430;
+            position: relative;
+            overflow: hidden;
             display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .road-lines {
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(to bottom, #fff 50%, transparent 50%);
+            background-size: 10px 40px;
+            animation: moveRoad 0.5s linear infinite;
+        }
+
+        @keyframes moveRoad {
+            0% { background-position-y: 0; }
+            100% { background-position-y: 40px; }
+        }
+
+        .car-sprite {
+            width: 60px;
+            height: 40px;
+            background: #ff3366;
+            border-radius: 6px 6px 0 0;
+            box-shadow: 0 0 15px #ff3366;
+            z-index: 2;
+            margin-bottom: 10px;
+        }
+
+        /* Hikaye ve Metin Alanı */
+        .story-section {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            gap: 15px;
+            overflow-y: auto;
+        }
+
+        .story-text {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #f1f5f9;
+        }
+
+        .warning-text {
+            font-weight: bold;
+            color: #ffcc00;
+            font-size: 14px;
+            background: rgba(255, 204, 0, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        /* Alt Butonlar Alanı - Mobil Dostu */
+        .action-section {
+            padding: 20px;
+            background: #161b26;
+            display: flex;
+            flex-direction: column;
             gap: 10px;
+            border-top: 1px solid #1e293b;
         }
 
         .btn {
-            flex: 1;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 14px;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            border: none;
+            background: #1e293b;
+            color: #fff;
+            transition: background 0.2s;
             text-transform: uppercase;
         }
 
-        .btn-buy { background: #00ff88; color: #0b0e14; }
-        .btn-sell { background: #ff3366; color: #fff; }
+        .btn:active {
+            transform: scale(0.98);
+        }
 
-        /* Cüzdan ve Log Alanları */
-        .portfolio-item {
-            display: flex;
-            justify-content: space-between;
-            background: #161b26;
+        .btn-choice {
+            background: #00ffcc;
+            color: #0b0e14;
+        }
+
+        .btn-danger {
+            background: #ff3366;
+            color: white;
+        }
+
+        /* Gizli Input Alanı */
+        .input-box {
+            display: none;
+            width: 100%;
             padding: 12px;
+            background: #0d0f14;
+            border: 1px solid #2d3748;
             border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-
-        .log-box {
-            background: #080b11;
-            border: 1px solid #1e293b;
-            border-radius: 8px;
-            padding: 10px;
-            height: 120px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 11px;
-            color: #8a99ad;
-        }
-
-        .log-entry {
-            margin-bottom: 4px;
-            border-left: 2px solid #334155;
-            padding-left: 6px;
-        }
-        .log-success { border-color: #00ff88; color: #a3e635; }
-        .log-danger { border-color: #ff3366; color: #fca5a5; }
-
-        /* 🖥️ BÜYÜK EKRANLAR İÇİN AYARLAR (Masaüstü) */
-        @media (min-width: 768px) {
-            body { padding: 30px; }
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-            .stats-bar { width: auto; }
-            .stat-box { flex: none; min-width: 180px; }
-            .main-grid {
-                grid-template-columns: 2fr 1fr;
-            }
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+            outline: none;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <div class="header-title">
-            <h1>CryptoTycoon</h1>
-            <p>Sanal 100,000$ ile oyna. Fiyatlar her 3 saniyede bir canlı güncellenir.</p>
-        </div>
-        <div class="stats-bar">
-            <div class="stat-box">
-                <div class="stat-label">Net Varlık</div>
-                <div class="stat-value gold" id="total-net-worth">$100,000.00</div>
+    <div class="game-container">
+        <!-- HUD Göstergeler -->
+        <div class="hud-bar">
+            <div class="hud-item">
+                <div class="hud-label">Konum</div>
+                <div class="hud-value" id="hud-km">0 KM</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-label">Nakit (USD)</div>
-                <div class="stat-value green" id="cash-balance">$100,000.00</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="main-grid">
-        <!-- SOL TARAF: Piyasalar ve Günlük Log -->
-        <div class="col-left">
-            <div class="panel">
-                <div class="panel-title">Canlı Piyasalar (Seçmek için tıkla)</div>
-                <div class="crypto-list" id="crypto-list-container">
-                    <!-- JavaScript burayı dolduracak -->
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">İşlem Günlüğü</div>
-                <div class="log-box" id="log-box">
-                    <div class="log-entry">Sistem aktif. Başlangıç bütçesi: 100.000$</div>
-                </div>
+            <div class="hud-item">
+                <div class="hud-label">Araba Sağlığı</div>
+                <div class="hud-value" id="hud-hp">100%</div>
             </div>
         </div>
 
-        <!-- SAĞ TARAF: Al-Sat ve Cüzdanım -->
-        <div class="col-right">
-            <div class="panel">
-                <div class="panel-title">Hızlı Al-Sat</div>
-                <div class="trade-coin-info">
-                    <div class="trade-coin-title" id="selected-coin-name">Bitcoin (BTC)</div>
-                    <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">
-                        Birim Fiyatı: <span id="selected-coin-price" style="color: #fff; font-weight: bold;">$62,000</span>
-                    </div>
-                </div>
+        <!-- Yol Görseli -->
+        <div class="road-viewport">
+            <div class="road-lines" id="road-anim"></div>
+            <div class="car-sprite"></div>
+        </div>
 
-                <div class="input-group">
-                    <label for="trade-amount">Adet Girin:</label>
-                    <input type="number" id="trade-amount" min="0" step="any" placeholder="0.00">
-                </div>
+        <!-- Hikaye Alanı -->
+        <div class="story-section">
+            <div class="warning-text" id="warning-box">DİKKAT!</div>
+            <p class="story-text" id="story-text">Gece yarısı ıssız bir otoyolda ilerliyorsun. Radyodan cızırtılı sesler geliyor. Birden yol kenarında parlayan neon ceketli bir otostopçu görüyorsun. Ne yapacaksın?</p>
+        </div>
 
-                <div class="trade-buttons">
-                    <button class="btn btn-buy" onclick="executeTrade('BUY')">SATIN AL</button>
-                    <button class="btn btn-sell" onclick="executeTrade('SELL')">SAT</button>
-                </div>
-            </div>
+        <!-- Giriş Kutusu (Şifre vb için) -->
+        <div style="padding: 0 20px;">
+            <input type="number" class="input-box" id="game-input" placeholder="Sayıyı girin...">
+        </div>
 
-            <div class="panel">
-                <div class="panel-title">Cüzdanımdaki Varlıklar</div>
-                <div id="portfolio-list">
-                    <div style="color: #64748b; font-size: 13px; text-align: center; padding: 10px;">Henüz hiç kripto paranız yok.</div>
-                </div>
-            </div>
+        <!-- Aksiyon Butonları -->
+        <div class="action-section" id="action-area">
+            <button class="btn btn-choice" onclick="nextStep(1)">Yavaşla ve Adamı Arabaya Al</button>
+            <button class="btn" onclick="nextStep(2)">Gaza Bas, Görmezden Gel</button>
         </div>
     </div>
 </div>
 
 <script>
-    let userCash = 100000.00;
-    let selectedCoinId = 'btc';
+    let currentStage = "start";
+    let memoryNumber = 0;
+    let kediKuralı = ""; // "bas" veya "basma"
+    let playerHp = 100;
+    let km = 0;
+    let clickCount = 0;
 
-    const cryptos = {
-        btc: { name: 'Bitcoin', symbol: 'BTC', price: 62000.00, change: 0, owned: 0, volatility: 0.02 },
-        eth: { name: 'Ethereum', symbol: 'ETH', price: 3400.00, change: 0, owned: 0, volatility: 0.03 },
-        sol: { name: 'Solana', symbol: 'SOL', price: 145.00, change: 0, owned: 0, volatility: 0.06 },
-        doge: { name: 'Dogecoin', symbol: 'DOGE', price: 0.14, change: 0, owned: 0, volatility: 0.12 },
-        elon: { name: 'MarsCoin', symbol: 'ELON', price: 0.005, change: 0, owned: 0, volatility: 0.30 }
-    };
-
-    function formatCurrency(val) {
-        return '$' + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function updateHud(newKm, hpDamage = 0) {
+        km += newKm;
+        playerHp = Math.max(0, playerHp - hpDamage);
+        document.getElementById('hud-km').innerText = km + " KM";
+        document.getElementById('hud-hp').innerText = playerHp + "%";
+        
+        if(playerHp <= 0) {
+            gameOver("Araban ağır hasar aldı ve yolda kaldın! Elendin.");
+        }
     }
 
-    function addLog(text, type = '') {
-        const logBox = document.getElementById('log-box');
-        const entry = document.createElement('div');
-        entry.className = `log-entry ${type}`;
-        const now = new Date();
-        const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-        entry.innerText = `[${timeStr}] ${text}`;
-        logBox.appendChild(entry);
-        logBox.scrollTop = logBox.scrollHeight;
+    function gameOver(reason) {
+        document.getElementById('road-anim').style.animation = "none";
+        document.getElementById('warning-box').style.display = "none";
+        document.getElementById('game-input').style.display = "none";
+        document.getElementById('story-text').innerText = reason;
+        document.getElementById('action-area').innerHTML = `<button class="btn btn-danger" onclick="resetGame()">YENİDEN BAŞLA</button>`;
     }
 
-    function renderMarket() {
-        const container = document.getElementById('crypto-list-container');
-        container.innerHTML = '';
+    function resetGame() {
+        location.reload();
+    }
 
-        for (const [id, coin] of Object.entries(cryptos)) {
-            const div = document.createElement('div');
-            div.className = `crypto-row ${id === selectedCoinId ? 'selected-row' : ''}`;
-            div.onclick = () => selectCoin(id);
+    function nextStep(choice) {
+        const textEl = document.getElementById('story-text');
+        const actionEl = document.getElementById('action-area');
+        const warnEl = document.getElementById('warning-box');
+        const inputEl = document.getElementById('game-input');
 
-            const changeClass = coin.change >= 0 ? 'price-up' : 'price-down';
-            const changeSign = coin.change >= 0 ? '+' : '';
+        // GİZLİ SAYI HAFIZASI ETABI
+        if (currentStage === "start") {
+            if (choice === 1) {
+                memoryNumber = Math.floor(100 + Math.random() * 900); // Rastgele 3 basamaklı sayı
+                updateHud(15, 0);
+                textEl.innerText = `Adam arabaya bindi. Garip gözlükleri var. Sana bakıp fısıldıyor: "İlerideki kontrol noktasında polisler beni arıyor. Onlara '${memoryNumber}' sayısını söylemelisin. Bu arada yolda KEDİ görürsen sakın ekrandaki butona BASMA!"`;
+                actionEl.innerHTML = `<button class="btn btn-choice" onclick="nextStage('etap2')">Devam Et</button>`;
+            } else {
+                updateHud(20, 10);
+                textEl.innerText = `Gaza bastın ama adam arkandan öyle bir lanet okudu ki arabanın motoru arıza yaptı (%10 Hasar). Yolda ilerlerken aniden karşına büyük bir tabela çıktı. Üzerinde kocaman kırmızı harflerle '${memoryNumber = 404}' yazıyor. Bunu aklında tutsan iyi olur.`;
+                actionEl.innerHTML = `<button class="btn btn-choice" onclick="nextStage('etap2_b')">Yola Devam Et</button>`;
+            }
+        }
+        
+        // POLİS BARİKATI ETABI
+        else if (currentStage === "etap2" || currentStage === "etap2_b") {
+            updateHud(30, 0);
+            textEl.innerText = "KM 45: Karşına neon ışıklı bir Robot Polis barikatı çıktı. Lazer silahlarını arabana doğrulttular. Telsizden mekanik bir ses geliyor: 'GEÇİŞ ŞİFRESİNİ GİRİN!' (Az önce aklında tuttuğun sayıyı girmen gerekiyor!)";
+            inputEl.style.display = "block";
+            actionEl.innerHTML = `<button class="btn btn-choice" onclick="checkPassword()">Şifreyi Onayla</button>`;
+        }
 
-            div.innerHTML = `
-                <div class="coin-info">
-                    <span class="coin-name">${coin.name}</span>
-                    <span class="coin-symbol">${coin.symbol}</span>
-                </div>
-                <div class="coin-stats">
-                    <div class="coin-price">${formatCurrency(coin.price)}</div>
-                    <div class="${changeClass}">${changeSign}${coin.change.toFixed(2)}%</div>
-                    <div class="user-owned">${coin.owned > 0 ? (coin.owned.toFixed(3) + ' ' + coin.symbol) : ''}</div>
-                </div>
+        // TERS PSİKOLOJİ / KEDİ ETABI
+        else if (currentStage === "kedi_etabi") {
+            // Bu etapta butona basma kuralları troller
+            if (choice === "MİYAV") {
+                clickCount++;
+                warnEl.innerText = `BASTIN! (Şu anki basma sayısı: ${clickCount})`;
+                if (clickCount === 3) {
+                    // Oyuncu 3 kere bastı. Ama kural basmamaktı!
+                    gameOver("TUZAK! Otostopçu adam sana 'Kedi görünce sakın BASMA' demişti. Sen ise gaza gelip 3 kere bastın ve araba patladı!");
+                }
+            } else if (choice === "BEKLE") {
+                // Oyuncu basmadan beklemeyi seçti (Doğru hamle)
+                updateHud(40, 0);
+                warnEl.style.display = "none";
+                textEl.innerText = "Harika! Kediyi görünce frene basmadın ve sakin kaldın. Tuzaktan kurtuldun. Otoyolun sonuna ulaştın ve büyük şehir ışıkları göründü. Oyunu BAŞARIYLA BİTİRDİN! Gerçek bir hafıza ustasısın.";
+                actionEl.innerHTML = `<button class="btn btn-choice" style="background:#00ff88;" onclick="resetGame()">KUTLA VE TEKRAR OYNA</button>`;
+            }
+        }
+    }
+
+    function nextStage(stageName) {
+        currentStage = stageName;
+        nextStep();
+    }
+
+    function checkPassword() {
+        const inputEl = document.getElementById('game-input');
+        const textEl = document.getElementById('story-text');
+        const actionEl = document.getElementById('action-area');
+        const warnEl = document.getElementById('warning-box');
+
+        if (parseInt(inputEl.value) === memoryNumber) {
+            inputEl.style.display = "none";
+            currentStage = "kedi_etabi";
+            updateHud(20, 0);
+            warnEl.style.display = "block";
+            warnEl.innerText = "GÖRSEL BİLDİRİM: YOLDA BİR KARA KEDİ BELİRDİ!";
+            textEl.innerText = "Polisler şifreyi onayladı ve barikatı açtı! Tam rahatladım derken ekranda aniden bir KEDİ belirdi ve sistem bağırıyor: 'HIZLICA ALTTTAKİ BUTONA 3 KERE BAS!'... Bir dakika, otostopçunun uyarısını hatırlıyor musun?";
+            
+            actionEl.innerHTML = `
+                <button class="btn btn-danger" onclick="nextStep('MİYAV')">3 KERE BAS</button>
+                <button class="btn" onclick="nextStep('BEKLE')">HİÇBİR ŞEYE BASMA, BEKLE</button>
             `;
-            container.appendChild(div);
-        }
-
-        const activeCoin = cryptos[selectedCoinId];
-        document.getElementById('selected-coin-name').innerText = `${activeCoin.name} (${activeCoin.symbol})`;
-        document.getElementById('selected-coin-price').innerText = formatCurrency(activeCoin.price);
-    }
-
-    function renderPortfolio() {
-        const portList = document.getElementById('portfolio-list');
-        portList.innerHTML = '';
-        let hasAssets = false;
-
-        for (const [id, coin] of Object.entries(cryptos)) {
-            if (coin.owned > 0) {
-                hasAssets = true;
-                const value = coin.owned * coin.price;
-                const item = document.createElement('div');
-                item.className = 'portfolio-item';
-                item.innerHTML = `
-                    <div><strong>${coin.symbol}</strong> (${coin.owned.toFixed(3)})</div>
-                    <div style="color: #00ff88; font-weight: bold;">${formatCurrency(value)}</div>
-                `;
-                portList.appendChild(item);
-            }
-        }
-        if (!hasAssets) {
-            portList.innerHTML = `<div style="color: #64748b; font-size: 13px; text-align: center; padding: 10px;">Henüz hiç kripto paranız yok.</div>`;
+        } else {
+            updateHud(0, 40);
+            alert("YANLIŞ SAYI! Polisler arabana ateş açtı! %40 Hasar!");
         }
     }
-
-    function updateBalances() {
-        let cryptoTotalValue = 0;
-        for (const coin of Object.values(cryptos)) {
-            cryptoTotalValue += coin.owned * coin.price;
-        }
-        const netWorth = userCash + cryptoTotalValue;
-        document.getElementById('cash-balance').innerText = formatCurrency(userCash);
-        document.getElementById('total-net-worth').innerText = formatCurrency(netWorth);
-    }
-
-    function selectCoin(id) {
-        selectedCoinId = id;
-        renderMarket();
-    }
-
-    function executeTrade(type) {
-        const amountInput = document.getElementById('trade-amount');
-        const amount = parseFloat(amountInput.value);
-        const coin = cryptos[selectedCoinId];
-
-        if (isNaN(amount) || amount <= 0) {
-            alert('Lütfen geçerli bir miktar girin!');
-            return;
-        }
-
-        const totalCost = amount * coin.price;
-
-        if (type === 'BUY') {
-            if (totalCost > userCash) {
-                alert('Yetersiz nakit bütçe!');
-                addLog(`Yetersiz nakit nedeniyle ${amount} ${coin.symbol} alınamadı.`, 'log-danger');
-                return;
-            }
-            userCash -= totalCost;
-            coin.owned += amount;
-            addLog(`${amount.toFixed(3)} ${coin.symbol} alındı. (${formatCurrency(totalCost)})`, 'log-success');
-        } else if (type === 'SELL') {
-            if (amount > coin.owned) {
-                alert(`Elinizde yeterli ${coin.symbol} yok!`);
-                return;
-            }
-            userCash += totalCost;
-            coin.owned -= amount;
-            addLog(`${amount.toFixed(3)} ${coin.symbol} satıldı. (${formatCurrency(totalCost)})`, 'log-danger');
-        }
-
-        amountInput.value = '';
-        updateBalances();
-        renderPortfolio();
-        renderMarket();
-    }
-
-    function simulateMarket() {
-        for (const coin of Object.values(cryptos)) {
-            const changePercent = (Math.random() * 2 - 1) * coin.volatility;
-            coin.price = Math.max(0.0001, coin.price + (coin.price * changePercent));
-            coin.change = changePercent * 100;
-        }
-        renderMarket();
-        renderPortfolio();
-        updateBalances();
-    }
-
-    renderMarket();
-    updateBalances();
-    setInterval(simulateMarket, 3000);
 </script>
+
 </body>
 </html>
