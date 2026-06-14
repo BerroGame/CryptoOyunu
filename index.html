@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Otoyol Macerası: Dikkatli Ol!</title>
+    <title>3D Fizikli Otoban Macerası</title>
     <style>
         * {
             margin: 0;
@@ -12,321 +12,310 @@
             font-family: 'Segoe UI', sans-serif;
             user-select: none;
         }
-
         body {
-            background-color: #0d0f14;
-            color: #e2e8f0;
+            background: #05070a;
+            color: #fff;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
         }
-
-        /* Telefon Ekranı Simülatörü Kontrolü */
-        .game-container {
+        /* Üst Panel */
+        .info-panel {
             width: 100%;
-            max-width: 450px;
-            height: 100vh;
-            background: #11141c;
-            display: flex;
-            flex-direction: column;
-            border-left: 1px solid #1e293b;
-            border-right: 1px solid #1e293b;
-            position: relative;
-        }
-
-        /* Üst Bar / Göstergeler */
-        .hud-bar {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px;
-            background: #161b26;
-            border-bottom: 2px solid #1e293b;
-        }
-
-        .hud-item {
+            max-width: 420px;
+            padding: 12px;
             text-align: center;
-        }
-
-        .hud-label {
-            font-size: 11px;
-            color: #94a3b8;
-            text-transform: uppercase;
-        }
-
-        .hud-value {
-            font-size: 16px;
-            font-weight: bold;
-            color: #00ffcc;
-        }
-
-        /* Akan Yol Animasyonu (CSS Efekti) */
-        .road-viewport {
-            height: 25vh;
-            background: #1f2430;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-        }
-
-        .road-lines {
-            position: absolute;
-            width: 10px;
-            height: 100%;
-            background: linear-gradient(to bottom, #fff 50%, transparent 50%);
-            background-size: 10px 40px;
-            animation: moveRoad 0.5s linear infinite;
-        }
-
-        @keyframes moveRoad {
-            0% { background-position-y: 0; }
-            100% { background-position-y: 40px; }
-        }
-
-        .car-sprite {
-            width: 60px;
-            height: 40px;
-            background: #ff3366;
-            border-radius: 6px 6px 0 0;
-            box-shadow: 0 0 15px #ff3366;
-            z-index: 2;
-            margin-bottom: 10px;
-        }
-
-        /* Hikaye ve Metin Alanı */
-        .story-section {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-            gap: 15px;
-            overflow-y: auto;
-        }
-
-        .story-text {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #f1f5f9;
-        }
-
-        .warning-text {
-            font-weight: bold;
-            color: #ffcc00;
-            font-size: 14px;
-            background: rgba(255, 204, 0, 0.1);
-            padding: 8px;
-            border-radius: 6px;
-            display: none;
-        }
-
-        /* Alt Butonlar Alanı - Mobil Dostu */
-        .action-section {
-            padding: 20px;
-            background: #161b26;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border-top: 1px solid #1e293b;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
+            background: #0b0e14;
             border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #1e293b;
+            z-index: 10;
+        }
+        .rule-box {
             font-size: 15px;
             font-weight: bold;
-            cursor: pointer;
-            background: #1e293b;
-            color: #fff;
-            transition: background 0.2s;
-            text-transform: uppercase;
+            color: #00ffcc;
+            margin-top: 5px;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
         }
-
-        .btn:active {
-            transform: scale(0.98);
+        /* 3D Görünüm Penceresi */
+        #canvas3d {
+            background: linear-gradient(to bottom, #0c1020, #05070a);
+            border: 2px solid #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            max-width: 100%;
+            max-height: 65vh;
         }
-
-        .btn-choice {
-            background: #00ffcc;
-            color: #0b0e14;
-        }
-
-        .btn-danger {
-            background: #ff3366;
-            color: white;
-        }
-
-        /* Gizli Input Alanı */
-        .input-box {
-            display: none;
+        /* Mobil Kontroller */
+        .controls {
+            display: flex;
+            gap: 15px;
             width: 100%;
-            padding: 12px;
-            background: #0d0f14;
-            border: 1px solid #2d3748;
-            border-radius: 8px;
-            color: white;
-            text-align: center;
+            max-width: 420px;
+            margin-top: 12px;
+            padding: 0 10px;
+            z-index: 10;
+        }
+        .control-btn {
+            flex: 1;
+            padding: 18px;
+            background: #ff3366;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
             font-size: 18px;
-            margin-bottom: 10px;
-            outline: none;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
+            transition: transform 0.1s;
+        }
+        .control-btn:active {
+            transform: scale(0.95);
+            background: #cc244f;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="game-container">
-        <!-- HUD Göstergeler -->
-        <div class="hud-bar">
-            <div class="hud-item">
-                <div class="hud-label">Konum</div>
-                <div class="hud-value" id="hud-km">0 KM</div>
-            </div>
-            <div class="hud-item">
-                <div class="hud-label">Araba Sağlığı</div>
-                <div class="hud-value" id="hud-hp">100%</div>
-            </div>
-        </div>
-
-        <!-- Yol Görseli -->
-        <div class="road-viewport">
-            <div class="road-lines" id="road-anim"></div>
-            <div class="car-sprite"></div>
-        </div>
-
-        <!-- Hikaye Alanı -->
-        <div class="story-section">
-            <div class="warning-text" id="warning-box">DİKKAT!</div>
-            <p class="story-text" id="story-text">Gece yarısı ıssız bir otoyolda ilerliyorsun. Radyodan cızırtılı sesler geliyor. Birden yol kenarında parlayan neon ceketli bir otostopçu görüyorsun. Ne yapacaksın?</p>
-        </div>
-
-        <!-- Giriş Kutusu (Şifre vb için) -->
-        <div style="padding: 0 20px;">
-            <input type="number" class="input-box" id="game-input" placeholder="Sayıyı girin...">
-        </div>
-
-        <!-- Aksiyon Butonları -->
-        <div class="action-section" id="action-area">
-            <button class="btn btn-choice" onclick="nextStep(1)">Yavaşla ve Adamı Arabaya Al</button>
-            <button class="btn" onclick="nextStep(2)">Gaza Bas, Görmezden Gel</button>
-        </div>
+<div class="info-panel">
+    <div style="display: flex; justify-content: space-between; font-size: 14px;">
+        <span>Skor: <strong id="scoreVal" style="color: #00ffcc;">0</strong></span>
+        <span>Can: <strong id="hpVal" style="color: #ff3366;">3</strong></span>
     </div>
+    <div class="rule-box" id="ruleText">KURAL: Mavi küplerden kaç, sarıları topla!</div>
+</div>
+
+<canvas id="canvas3d" width="400" height="500"></canvas>
+
+<div class="controls">
+    <button class="control-btn" id="leftBtn">◀ SOL</button>
+    <button class="control-btn" id="rightBtn">SAĞ ▶</button>
 </div>
 
 <script>
-    let currentStage = "start";
-    let memoryNumber = 0;
-    let kediKuralı = ""; // "bas" veya "basma"
-    let playerHp = 100;
-    let km = 0;
-    let clickCount = 0;
+    const canvas = document.getElementById("canvas3d");
+    const ctx = canvas.getContext("2d");
 
-    function updateHud(newKm, hpDamage = 0) {
-        km += newKm;
-        playerHp = Math.max(0, playerHp - hpDamage);
-        document.getElementById('hud-km').innerText = km + " KM";
-        document.getElementById('hud-hp').innerText = playerHp + "%";
-        
-        if(playerHp <= 0) {
-            gameOver("Araban ağır hasar aldı ve yolda kaldın! Elendin.");
+    // 3D Projeksiyon Sabitleri (Kamera Perspektifi)
+    const FOV = 200; 
+    const CAMERA_Y = 120; // Kameranın yerden yüksekliği
+    const CAMERA_Z = -100; // Kameranın arabanın arkasındaki mesafesi
+    const VANISH_Y = 180; // Ufuk çizgisinin ekrandaki yüksekliği
+
+    // Oyun Nesneleri
+    let player = { x: 0, targetX: 0, y: 0, z: 40, width: 30, height: 15, depth: 50 };
+    let obstacles = [];
+    let score = 0;
+    let hp = 3;
+    let gameActive = true;
+    let currentRule = "AVOID_BLUE"; // AVOID_BLUE, HIT_YELLOW, RESET
+
+    // 3D Noktayı 2D Ekrana İzdüşürme Fonksiyonu (Gerçek Matematiksel Fizik)
+    function project3D(x, y, z) {
+        let perspective = FOV / (FOV + z);
+        return {
+            x: (canvas.width / 2) + (x * perspective),
+            y: VANISH_Y + ((y + CAMERA_Y) * perspective),
+            scale: perspective
+        };
+    }
+
+    // Kurallar
+    const rules = [
+        { id: "AVOID_BLUE", text: "KURAL: Mavi 3D küplerden KAÇ!" },
+        { id: "HIT_YELLOW", text: "GÖREV: Fiziksel Sarı küpleri TOPLA!" },
+        { id: "DONOT_MOVE", text: "UYARI: Şerit değiştirme, sabit kal!" }
+    ];
+
+    function changeRule() {
+        if (!gameActive) return;
+        let r = rules[Math.floor(Math.random() * rules.length)];
+        currentRule = r.id;
+        document.getElementById("ruleText").innerText = r.text;
+    }
+    setInterval(changeRule, 6000);
+
+    // 3D Fizik Nesnesi Ekleme
+    function spawn3DObject() {
+        if (!gameActive) return;
+        let randomX = (Math.random() * 160) - 80; // Yolun genişliği içinde rastgele X
+        let types = ["BLUE_CUBE", "YELLOW_CUBE", "BOUNCING_BALL"];
+        let rType = types[Math.floor(Math.random() * types.length)];
+
+        obstacles.push({
+            x: randomX,
+            y: -100, // Havadan düşmeye başlasın (Fizik için)
+            z: 800,  // Uzaktan gelecek
+            vx: (Math.random() * 2 - 1) * 0.5, // X ekseni hızı
+            vy: 0,   // Yer çekimi hızı
+            width: 25,
+            height: 25,
+            type: rType,
+            bounciness: rType === "BOUNCING_BALL" ? 0.8 : 0.2 // Sekme katsayısı
+        });
+    }
+    setInterval(spawn3DObject, 1200);
+
+    // Kontroller
+    function moveLeft() { if(gameActive) { player.targetX = Math.max(-80, player.targetX - 50); checkMoveRule(); } }
+    function moveRight() { if(gameActive) { player.targetX = Math.min(80, player.targetX + 50); checkMoveRule(); } }
+    
+    function checkMoveRule() {
+        if(currentRule === "DONOT_MOVE") {
+            decreaseHp("Hareket etmemen gerekiyordu! Kural ihlali.");
         }
     }
 
-    function gameOver(reason) {
-        document.getElementById('road-anim').style.animation = "none";
-        document.getElementById('warning-box').style.display = "none";
-        document.getElementById('game-input').style.display = "none";
-        document.getElementById('story-text').innerText = reason;
-        document.getElementById('action-area').innerHTML = `<button class="btn btn-danger" onclick="resetGame()">YENİDEN BAŞLA</button>`;
+    document.addEventListener("keydown", (e) => {
+        if(e.key === "ArrowLeft" || e.key === "a") moveLeft();
+        if(e.key === "ArrowRight" || e.key === "d") moveRight();
+    });
+    document.getElementById("leftBtn").addEventListener("click", moveLeft);
+    document.getElementById("rightBtn").addEventListener("click", moveRight);
+
+    function decreaseHp(msg) {
+        hp--;
+        document.getElementById("hpVal").innerText = hp;
+        if(hp <= 0) {
+            gameActive = false;
+            alert("OYUN BİTTİ! Skorun: " + score + "\nSebep: " + msg);
+            location.reload();
+        }
     }
 
-    function resetGame() {
-        location.reload();
-    }
+    // Ana Oyun Döngüsü
+    function draw() {
+        if (!gameActive) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    function nextStep(choice) {
-        const textEl = document.getElementById('story-text');
-        const actionEl = document.getElementById('action-area');
-        const warnEl = document.getElementById('warning-box');
-        const inputEl = document.getElementById('game-input');
+        // 1. 3D Otoyolu Çizmek (Ufka doğru daralan çizgiler)
+        let pFarLeft = project3D(-120, 0, 1000);
+        let pFarRight = project3D(120, 0, 1000);
+        let pNearLeft = project3D(-150, 0, 20);
+        let pNearRight = project3D(150, 0, 20);
 
-        // GİZLİ SAYI HAFIZASI ETABI
-        if (currentStage === "start") {
-            if (choice === 1) {
-                memoryNumber = Math.floor(100 + Math.random() * 900); // Rastgele 3 basamaklı sayı
-                updateHud(15, 0);
-                textEl.innerText = `Adam arabaya bindi. Garip gözlükleri var. Sana bakıp fısıldıyor: "İlerideki kontrol noktasında polisler beni arıyor. Onlara '${memoryNumber}' sayısını söylemelisin. Bu arada yolda KEDİ görürsen sakın ekrandaki butona BASMA!"`;
-                actionEl.innerHTML = `<button class="btn btn-choice" onclick="nextStage('etap2')">Devam Et</button>`;
+        // Yolun Gövdesi
+        ctx.fillStyle = "#111420";
+        ctx.beginPath();
+        ctx.moveTo(pNearLeft.x, pNearLeft.y);
+        ctx.lineTo(pFarLeft.x, pFarLeft.y);
+        ctx.lineTo(pFarRight.x, pFarRight.y);
+        ctx.lineTo(pNearRight.x, pNearRight.y);
+        ctx.fill();
+
+        // Yol Çizgileri (Sol-Sağ Sınırlar)
+        ctx.strokeStyle = "#475569";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(pNearLeft.x, pNearLeft.y); ctx.lineTo(pFarLeft.x, pFarLeft.y);
+        ctx.moveTo(pNearRight.x, pNearRight.y); ctx.lineTo(pFarRight.x, pFarRight.y);
+        ctx.stroke();
+
+        // 2. Oyuncu Arabasını Yumuşakça Hareket Ettir (X İnterpolasyonu)
+        player.x += (player.targetX - player.x) * 0.2;
+        let pCar = project3D(player.x, player.y, player.z);
+        
+        // Oyuncunun 3D Kasası (Neon Pembe)
+        let carW = player.width * pCar.scale;
+        let carH = player.height * pCar.scale;
+        ctx.fillStyle = "#ff3366";
+        ctx.shadowColor = "#ff3366";
+        ctx.shadowBlur = 15;
+        ctx.fillRect(pCar.x - carW/2, pCar.y - carH, carW, carH);
+        ctx.shadowBlur = 0;
+
+        // 3. 3D Fizik Nesnelerini Güncelle ve Çiz (Uzaktakiler arkada, yakındakiler önde olsun diye tersten tarıyoruz)
+        obstacles.sort((a, b) => b.z - a.z); // Z-Sorting (3D Derinlik Sıralaması)
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            let obs = obstacles[i];
+
+            // GERÇEK FİZİK MOTORU KURALLARI
+            obs.z -= 6 + (score * 0.05); // Arabaya doğru Z ekseninde akma hızı
+            obs.vy += 0.4; // Yer çekimi ivmesi (aşağı doğru hızlandırır)
+            obs.y += obs.vy; // Dikey konumu güncelle
+            obs.x += obs.vx; // Yatay konumu güncelle
+
+            // Yere Çarpıp Sekme Fiziği (Görsel Tatmin Oranı Yüksek Parçalar)
+            if (obs.y >= 0) { 
+                obs.y = 0;
+                obs.vy = -obs.vy * obs.bounciness; // Enerji kaybıyla yukarı geri sekme
+                
+                // Eğer sekme hızı çok küçüldüyse tamamen durdur
+                if (Math.abs(obs.vy) < 0.5) obs.vy = 0;
+            }
+
+            // Ekrandan çıkanları sil
+            if (obs.z < 10) {
+                if(obs.type !== "YELLOW_CUBE") score += 2;
+                document.getElementById("scoreVal").innerText = score;
+                obstacles.splice(i, 1);
+                continue;
+            }
+
+            // 3D Nesneyi Ekrana İzdüşür
+            let pObs = project3D(obs.x, obs.y, obs.z);
+            let obsSize = obs.width * pObs.scale;
+
+            // Kameranın arkasında kalanları çizme hatasını engelle
+            if(pObs.scale <= 0) continue;
+
+            // Nesne Tiplerine Göre Renk ve Gölge Ver (3D Derinlik)
+            if (obs.type === "BLUE_CUBE") {
+                ctx.fillStyle = "#2563eb";
+                ctx.shadowColor = "#00ffff";
+            } else if (obs.type === "YELLOW_CUBE") {
+                ctx.fillStyle = "#eab308";
+                ctx.shadowColor = "#ffcc00";
+            } else if (obs.type === "BOUNCING_BALL") {
+                ctx.fillStyle = "#a855f7"; // Çılgın seken top
+                ctx.shadowColor = "#a855f7";
+            }
+
+            // Küpün Ön Yüzeyini Çiz (3D Hacim Hissiyatı)
+            ctx.shadowBlur = obs.y === 0 ? 10 : 2; // Yere yakınken gölgesi parlasın
+            if(obs.type === "BOUNCING_BALL") {
+                ctx.beginPath();
+                ctx.arc(pObs.x, pObs.y - obsSize/2, obsSize/2, 0, Math.PI * 2);
+                ctx.fill();
             } else {
-                updateHud(20, 10);
-                textEl.innerText = `Gaza bastın ama adam arkandan öyle bir lanet okudu ki arabanın motoru arıza yaptı (%10 Hasar). Yolda ilerlerken aniden karşına büyük bir tabela çıktı. Üzerinde kocaman kırmızı harflerle '${memoryNumber = 404}' yazıyor. Bunu aklında tutsan iyi olur.`;
-                actionEl.innerHTML = `<button class="btn btn-choice" onclick="nextStage('etap2_b')">Yola Devam Et</button>`;
+                ctx.fillRect(pObs.x - obsSize/2, pObs.y - obsSize, obsSize, obsSize);
             }
-        }
-        
-        // POLİS BARİKATI ETABI
-        else if (currentStage === "etap2" || currentStage === "etap2_b") {
-            updateHud(30, 0);
-            textEl.innerText = "KM 45: Karşına neon ışıklı bir Robot Polis barikatı çıktı. Lazer silahlarını arabana doğrulttular. Telsizden mekanik bir ses geliyor: 'GEÇİŞ ŞİFRESİNİ GİRİN!' (Az önce aklında tuttuğun sayıyı girmen gerekiyor!)";
-            inputEl.style.display = "block";
-            actionEl.innerHTML = `<button class="btn btn-choice" onclick="checkPassword()">Şifreyi Onayla</button>`;
-        }
+            ctx.shadowBlur = 0;
 
-        // TERS PSİKOLOJİ / KEDİ ETABI
-        else if (currentStage === "kedi_etabi") {
-            // Bu etapta butona basma kuralları troller
-            if (choice === "MİYAV") {
-                clickCount++;
-                warnEl.innerText = `BASTIN! (Şu anki basma sayısı: ${clickCount})`;
-                if (clickCount === 3) {
-                    // Oyuncu 3 kere bastı. Ama kural basmamaktı!
-                    gameOver("TUZAK! Otostopçu adam sana 'Kedi görünce sakın BASMA' demişti. Sen ise gaza gelip 3 kere bastın ve araba patladı!");
+            // 3D ÇARPIŞMA ALGILAYICI (Z, X ve Y derinlik kontrolü)
+            if (Math.abs(obs.z - player.z) < 25) { // Z ekseninde aynı hizadaysak
+                if (Math.abs(obs.x - player.x) < (player.width/2 + obs.width/2)) { // X ekseninde çarptıysa
+                    if (obs.y >= -player.height) { // Havada üstünden geçmediyse, Y ekseni teması
+                        
+                        // Kurala göre can götür veya puan ver
+                        if (obs.type === "YELLOW_CUBE") {
+                            if(currentRule === "HIT_YELLOW") {
+                                score += 20;
+                                document.getElementById("scoreVal").innerText = score;
+                            } else {
+                                decreaseHp("Sarı küpü topladın ama aktif görev o değildi!");
+                            }
+                        } else if (obs.type === "BLUE_CUBE") {
+                            decreaseHp("Mavi 3D küpe çarptın!");
+                        } else if (obs.type === "BOUNCING_BALL") {
+                            decreaseHp("Seken top arabana çarptı ve seni ezdi!");
+                        }
+
+                        obstacles.splice(i, 1);
+                    }
                 }
-            } else if (choice === "BEKLE") {
-                // Oyuncu basmadan beklemeyi seçti (Doğru hamle)
-                updateHud(40, 0);
-                warnEl.style.display = "none";
-                textEl.innerText = "Harika! Kediyi görünce frene basmadın ve sakin kaldın. Tuzaktan kurtuldun. Otoyolun sonuna ulaştın ve büyük şehir ışıkları göründü. Oyunu BAŞARIYLA BİTİRDİN! Gerçek bir hafıza ustasısın.";
-                actionEl.innerHTML = `<button class="btn btn-choice" style="background:#00ff88;" onclick="resetGame()">KUTLA VE TEKRAR OYNA</button>`;
             }
         }
+
+        requestAnimationFrame(draw);
     }
 
-    function nextStage(stageName) {
-        currentStage = stageName;
-        nextStep();
-    }
-
-    function checkPassword() {
-        const inputEl = document.getElementById('game-input');
-        const textEl = document.getElementById('story-text');
-        const actionEl = document.getElementById('action-area');
-        const warnEl = document.getElementById('warning-box');
-
-        if (parseInt(inputEl.value) === memoryNumber) {
-            inputEl.style.display = "none";
-            currentStage = "kedi_etabi";
-            updateHud(20, 0);
-            warnEl.style.display = "block";
-            warnEl.innerText = "GÖRSEL BİLDİRİM: YOLDA BİR KARA KEDİ BELİRDİ!";
-            textEl.innerText = "Polisler şifreyi onayladı ve barikatı açtı! Tam rahatladım derken ekranda aniden bir KEDİ belirdi ve sistem bağırıyor: 'HIZLICA ALTTTAKİ BUTONA 3 KERE BAS!'... Bir dakika, otostopçunun uyarısını hatırlıyor musun?";
-            
-            actionEl.innerHTML = `
-                <button class="btn btn-danger" onclick="nextStep('MİYAV')">3 KERE BAS</button>
-                <button class="btn" onclick="nextStep('BEKLE')">HİÇBİR ŞEYE BASMA, BEKLE</button>
-            `;
-        } else {
-            updateHud(0, 40);
-            alert("YANLIŞ SAYI! Polisler arabana ateş açtı! %40 Hasar!");
-        }
-    }
+    draw();
 </script>
-
 </body>
 </html>
