@@ -2,79 +2,42 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAM Booster Pro</title>
     <style>
-        body { 
-            background: #000; 
-            color: #0f0; 
-            text-align: center; 
-            font-family: sans-serif; 
-            margin: 0; 
-            overflow: hidden; 
-        }
-        #ui { margin-top: 30vh; }
+        body { background: #000; margin: 0; overflow: hidden; }
         #startBtn { 
-            padding: 20px 40px; 
-            font-size: 24px; 
-            cursor: pointer; 
-            background: #0f0; 
-            border: none; 
-            border-radius: 10px;
+            width: 100vw; height: 100vh; 
+            font-size: 50px; cursor: pointer; 
+            background: #000; color: #fff; border: none;
         }
         .troll-video {
-            position: fixed; 
-            width: 150px; 
-            height: 150px; 
-            z-index: 99999;
-            display: none; 
-            border: 4px solid red;
+            position: fixed; width: 48%; height: 48%; z-index: 999;
+            display: none; object-fit: cover;
         }
     </style>
 </head>
 <body>
 
-    <div id="ui">
-        <h1>RAM Booster Pro</h1>
-        <p>Cihazı hızlandırmak için başlatın.</p>
-        <button id="startBtn">BAŞLAT</button>
-    </div>
+    <button id="startBtn">BAŞLAT</button>
 
-    <!-- Videoları buraya doğrudan ekledim -->
-    <video id="v1" class="troll-video" style="top:10px; left:10px;" src="troll.mp4" loop playsinline></video>
-    <video id="v2" class="troll-video" style="top:10px; right:10px;" src="troll.mp4" loop playsinline></video>
-    <video id="v3" class="troll-video" style="bottom:10px; left:10px;" src="troll.mp4" loop playsinline></video>
-    <video id="v4" class="troll-video" style="bottom:10px; right:10px;" src="troll.mp4" loop playsinline></video>
+    <!-- Devasa videolar (Ekranın 4 köşesini kaplar) -->
+    <video id="v1" class="troll-video" style="top:0; left:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
+    <video id="v2" class="troll-video" style="top:0; right:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
+    <video id="v3" class="troll-video" style="bottom:0; left:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
+    <video id="v4" class="troll-video" style="bottom:0; right:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
 
     <script>
-        const btn = document.getElementById('startBtn');
-        const ui = document.getElementById('ui');
-        const videos = document.querySelectorAll('.troll-video');
+        document.getElementById('startBtn').addEventListener('click', function() {
+            document.documentElement.requestFullscreen();
+            this.style.display = 'none'; // Butonu yok et
 
-        btn.addEventListener('click', function() {
-            // Tam ekran isteği
-            document.documentElement.requestFullscreen().catch(e => console.log(e));
-            
-            ui.innerHTML = "<h1>TEMİZLENİYOR...</h1><p>Lütfen bekleyin, işlem sırasında cihazı kullanmayın.</p>";
-            
+            let videos = document.querySelectorAll('.troll-video');
             videos.forEach(v => {
                 v.style.display = 'block';
                 v.play();
             });
 
-            // 30 saniye sonra her şeyi kapat
             setTimeout(() => {
-                videos.forEach(v => { 
-                    v.pause(); 
-                    v.style.display = 'none'; 
-                });
-                
-                if (document.fullscreenElement) {
-                    document.exitFullscreen();
-                }
-                
-                ui.innerHTML = "<h1>İşlem Başarılı!</h1><p>Cihazınız hızlandırıldı.</p>";
-                alert("RAM Temizleme Tamamlandı!");
+                location.reload(); // 30 saniye sonra her şeyi sıfırla
             }, 30000);
         });
     </script>
