@@ -2,320 +2,81 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D Fizikli Otoban Macerası</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAM Booster Pro</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-            user-select: none;
+        body { 
+            background: #000; 
+            color: #0f0; 
+            text-align: center; 
+            font-family: sans-serif; 
+            margin: 0; 
+            overflow: hidden; 
         }
-        body {
-            background: #05070a;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-        /* Üst Panel */
-        .info-panel {
-            width: 100%;
-            max-width: 420px;
-            padding: 12px;
-            text-align: center;
-            background: #0b0e14;
+        #ui { margin-top: 30vh; }
+        #startBtn { 
+            padding: 20px 40px; 
+            font-size: 24px; 
+            cursor: pointer; 
+            background: #0f0; 
+            border: none; 
             border-radius: 10px;
-            margin-bottom: 8px;
-            border: 1px solid #1e293b;
-            z-index: 10;
         }
-        .rule-box {
-            font-size: 15px;
-            font-weight: bold;
-            color: #00ffcc;
-            margin-top: 5px;
-            text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
-        }
-        /* 3D Görünüm Penceresi */
-        #canvas3d {
-            background: linear-gradient(to bottom, #0c1020, #05070a);
-            border: 2px solid #1e293b;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            max-width: 100%;
-            max-height: 65vh;
-        }
-        /* Mobil Kontroller */
-        .controls {
-            display: flex;
-            gap: 15px;
-            width: 100%;
-            max-width: 420px;
-            margin-top: 12px;
-            padding: 0 10px;
-            z-index: 10;
-        }
-        .control-btn {
-            flex: 1;
-            padding: 18px;
-            background: #ff3366;
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
-            transition: transform 0.1s;
-        }
-        .control-btn:active {
-            transform: scale(0.95);
-            background: #cc244f;
+        .troll-video {
+            position: fixed; 
+            width: 150px; 
+            height: 150px; 
+            z-index: 99999;
+            display: none; 
+            border: 4px solid red;
         }
     </style>
 </head>
 <body>
 
-<div class="info-panel">
-    <div style="display: flex; justify-content: space-between; font-size: 14px;">
-        <span>Skor: <strong id="scoreVal" style="color: #00ffcc;">0</strong></span>
-        <span>Can: <strong id="hpVal" style="color: #ff3366;">3</strong></span>
+    <div id="ui">
+        <h1>RAM Booster Pro</h1>
+        <p>Cihazı hızlandırmak için başlatın.</p>
+        <button id="startBtn">BAŞLAT</button>
     </div>
-    <div class="rule-box" id="ruleText">KURAL: Mavi küplerden kaç, sarıları topla!</div>
-</div>
 
-<canvas id="canvas3d" width="400" height="500"></canvas>
+    <!-- Videoları buraya doğrudan ekledim -->
+    <video id="v1" class="troll-video" style="top:10px; left:10px;" src="troll.mp4" loop playsinline></video>
+    <video id="v2" class="troll-video" style="top:10px; right:10px;" src="troll.mp4" loop playsinline></video>
+    <video id="v3" class="troll-video" style="bottom:10px; left:10px;" src="troll.mp4" loop playsinline></video>
+    <video id="v4" class="troll-video" style="bottom:10px; right:10px;" src="troll.mp4" loop playsinline></video>
 
-<div class="controls">
-    <button class="control-btn" id="leftBtn">◀ SOL</button>
-    <button class="control-btn" id="rightBtn">SAĞ ▶</button>
-</div>
+    <script>
+        const btn = document.getElementById('startBtn');
+        const ui = document.getElementById('ui');
+        const videos = document.querySelectorAll('.troll-video');
 
-<script>
-    const canvas = document.getElementById("canvas3d");
-    const ctx = canvas.getContext("2d");
+        btn.addEventListener('click', function() {
+            // Tam ekran isteği
+            document.documentElement.requestFullscreen().catch(e => console.log(e));
+            
+            ui.innerHTML = "<h1>TEMİZLENİYOR...</h1><p>Lütfen bekleyin, işlem sırasında cihazı kullanmayın.</p>";
+            
+            videos.forEach(v => {
+                v.style.display = 'block';
+                v.play();
+            });
 
-    // 3D Projeksiyon Sabitleri (Kamera Perspektifi)
-    const FOV = 200; 
-    const CAMERA_Y = 120; // Kameranın yerden yüksekliği
-    const CAMERA_Z = -100; // Kameranın arabanın arkasındaki mesafesi
-    const VANISH_Y = 180; // Ufuk çizgisinin ekrandaki yüksekliği
-
-    // Oyun Nesneleri
-    let player = { x: 0, targetX: 0, y: 0, z: 40, width: 30, height: 15, depth: 50 };
-    let obstacles = [];
-    let score = 0;
-    let hp = 3;
-    let gameActive = true;
-    let currentRule = "AVOID_BLUE"; // AVOID_BLUE, HIT_YELLOW, RESET
-
-    // 3D Noktayı 2D Ekrana İzdüşürme Fonksiyonu (Gerçek Matematiksel Fizik)
-    function project3D(x, y, z) {
-        let perspective = FOV / (FOV + z);
-        return {
-            x: (canvas.width / 2) + (x * perspective),
-            y: VANISH_Y + ((y + CAMERA_Y) * perspective),
-            scale: perspective
-        };
-    }
-
-    // Kurallar
-    const rules = [
-        { id: "AVOID_BLUE", text: "KURAL: Mavi 3D küplerden KAÇ!" },
-        { id: "HIT_YELLOW", text: "GÖREV: Fiziksel Sarı küpleri TOPLA!" },
-        { id: "DONOT_MOVE", text: "UYARI: Şerit değiştirme, sabit kal!" }
-    ];
-
-    function changeRule() {
-        if (!gameActive) return;
-        let r = rules[Math.floor(Math.random() * rules.length)];
-        currentRule = r.id;
-        document.getElementById("ruleText").innerText = r.text;
-    }
-    setInterval(changeRule, 6000);
-
-    // 3D Fizik Nesnesi Ekleme
-    function spawn3DObject() {
-        if (!gameActive) return;
-        let randomX = (Math.random() * 160) - 80; // Yolun genişliği içinde rastgele X
-        let types = ["BLUE_CUBE", "YELLOW_CUBE", "BOUNCING_BALL"];
-        let rType = types[Math.floor(Math.random() * types.length)];
-
-        obstacles.push({
-            x: randomX,
-            y: -100, // Havadan düşmeye başlasın (Fizik için)
-            z: 800,  // Uzaktan gelecek
-            vx: (Math.random() * 2 - 1) * 0.5, // X ekseni hızı
-            vy: 0,   // Yer çekimi hızı
-            width: 25,
-            height: 25,
-            type: rType,
-            bounciness: rType === "BOUNCING_BALL" ? 0.8 : 0.2 // Sekme katsayısı
-        });
-    }
-    setInterval(spawn3DObject, 1200);
-
-    // Kontroller
-    function moveLeft() { if(gameActive) { player.targetX = Math.max(-80, player.targetX - 50); checkMoveRule(); } }
-    function moveRight() { if(gameActive) { player.targetX = Math.min(80, player.targetX + 50); checkMoveRule(); } }
-    
-    function checkMoveRule() {
-        if(currentRule === "DONOT_MOVE") {
-            decreaseHp("Hareket etmemen gerekiyordu! Kural ihlali.");
-        }
-    }
-
-    document.addEventListener("keydown", (e) => {
-        if(e.key === "ArrowLeft" || e.key === "a") moveLeft();
-        if(e.key === "ArrowRight" || e.key === "d") moveRight();
-    });
-    document.getElementById("leftBtn").addEventListener("click", moveLeft);
-    document.getElementById("rightBtn").addEventListener("click", moveRight);
-
-    function decreaseHp(msg) {
-        hp--;
-        document.getElementById("hpVal").innerText = hp;
-        if(hp <= 0) {
-            gameActive = false;
-            alert("OYUN BİTTİ! Skorun: " + score + "\nSebep: " + msg);
-            location.reload();
-        }
-    }
-
-    // Ana Oyun Döngüsü
-    function draw() {
-        if (!gameActive) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // 1. 3D Otoyolu Çizmek (Ufka doğru daralan çizgiler)
-        let pFarLeft = project3D(-120, 0, 1000);
-        let pFarRight = project3D(120, 0, 1000);
-        let pNearLeft = project3D(-150, 0, 20);
-        let pNearRight = project3D(150, 0, 20);
-
-        // Yolun Gövdesi
-        ctx.fillStyle = "#111420";
-        ctx.beginPath();
-        ctx.moveTo(pNearLeft.x, pNearLeft.y);
-        ctx.lineTo(pFarLeft.x, pFarLeft.y);
-        ctx.lineTo(pFarRight.x, pFarRight.y);
-        ctx.lineTo(pNearRight.x, pNearRight.y);
-        ctx.fill();
-
-        // Yol Çizgileri (Sol-Sağ Sınırlar)
-        ctx.strokeStyle = "#475569";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(pNearLeft.x, pNearLeft.y); ctx.lineTo(pFarLeft.x, pFarLeft.y);
-        ctx.moveTo(pNearRight.x, pNearRight.y); ctx.lineTo(pFarRight.x, pFarRight.y);
-        ctx.stroke();
-
-        // 2. Oyuncu Arabasını Yumuşakça Hareket Ettir (X İnterpolasyonu)
-        player.x += (player.targetX - player.x) * 0.2;
-        let pCar = project3D(player.x, player.y, player.z);
-        
-        // Oyuncunun 3D Kasası (Neon Pembe)
-        let carW = player.width * pCar.scale;
-        let carH = player.height * pCar.scale;
-        ctx.fillStyle = "#ff3366";
-        ctx.shadowColor = "#ff3366";
-        ctx.shadowBlur = 15;
-        ctx.fillRect(pCar.x - carW/2, pCar.y - carH, carW, carH);
-        ctx.shadowBlur = 0;
-
-        // 3. 3D Fizik Nesnelerini Güncelle ve Çiz (Uzaktakiler arkada, yakındakiler önde olsun diye tersten tarıyoruz)
-        obstacles.sort((a, b) => b.z - a.z); // Z-Sorting (3D Derinlik Sıralaması)
-
-        for (let i = obstacles.length - 1; i >= 0; i--) {
-            let obs = obstacles[i];
-
-            // GERÇEK FİZİK MOTORU KURALLARI
-            obs.z -= 6 + (score * 0.05); // Arabaya doğru Z ekseninde akma hızı
-            obs.vy += 0.4; // Yer çekimi ivmesi (aşağı doğru hızlandırır)
-            obs.y += obs.vy; // Dikey konumu güncelle
-            obs.x += obs.vx; // Yatay konumu güncelle
-
-            // Yere Çarpıp Sekme Fiziği (Görsel Tatmin Oranı Yüksek Parçalar)
-            if (obs.y >= 0) { 
-                obs.y = 0;
-                obs.vy = -obs.vy * obs.bounciness; // Enerji kaybıyla yukarı geri sekme
+            // 30 saniye sonra her şeyi kapat
+            setTimeout(() => {
+                videos.forEach(v => { 
+                    v.pause(); 
+                    v.style.display = 'none'; 
+                });
                 
-                // Eğer sekme hızı çok küçüldüyse tamamen durdur
-                if (Math.abs(obs.vy) < 0.5) obs.vy = 0;
-            }
-
-            // Ekrandan çıkanları sil
-            if (obs.z < 10) {
-                if(obs.type !== "YELLOW_CUBE") score += 2;
-                document.getElementById("scoreVal").innerText = score;
-                obstacles.splice(i, 1);
-                continue;
-            }
-
-            // 3D Nesneyi Ekrana İzdüşür
-            let pObs = project3D(obs.x, obs.y, obs.z);
-            let obsSize = obs.width * pObs.scale;
-
-            // Kameranın arkasında kalanları çizme hatasını engelle
-            if(pObs.scale <= 0) continue;
-
-            // Nesne Tiplerine Göre Renk ve Gölge Ver (3D Derinlik)
-            if (obs.type === "BLUE_CUBE") {
-                ctx.fillStyle = "#2563eb";
-                ctx.shadowColor = "#00ffff";
-            } else if (obs.type === "YELLOW_CUBE") {
-                ctx.fillStyle = "#eab308";
-                ctx.shadowColor = "#ffcc00";
-            } else if (obs.type === "BOUNCING_BALL") {
-                ctx.fillStyle = "#a855f7"; // Çılgın seken top
-                ctx.shadowColor = "#a855f7";
-            }
-
-            // Küpün Ön Yüzeyini Çiz (3D Hacim Hissiyatı)
-            ctx.shadowBlur = obs.y === 0 ? 10 : 2; // Yere yakınken gölgesi parlasın
-            if(obs.type === "BOUNCING_BALL") {
-                ctx.beginPath();
-                ctx.arc(pObs.x, pObs.y - obsSize/2, obsSize/2, 0, Math.PI * 2);
-                ctx.fill();
-            } else {
-                ctx.fillRect(pObs.x - obsSize/2, pObs.y - obsSize, obsSize, obsSize);
-            }
-            ctx.shadowBlur = 0;
-
-            // 3D ÇARPIŞMA ALGILAYICI (Z, X ve Y derinlik kontrolü)
-            if (Math.abs(obs.z - player.z) < 25) { // Z ekseninde aynı hizadaysak
-                if (Math.abs(obs.x - player.x) < (player.width/2 + obs.width/2)) { // X ekseninde çarptıysa
-                    if (obs.y >= -player.height) { // Havada üstünden geçmediyse, Y ekseni teması
-                        
-                        // Kurala göre can götür veya puan ver
-                        if (obs.type === "YELLOW_CUBE") {
-                            if(currentRule === "HIT_YELLOW") {
-                                score += 20;
-                                document.getElementById("scoreVal").innerText = score;
-                            } else {
-                                decreaseHp("Sarı küpü topladın ama aktif görev o değildi!");
-                            }
-                        } else if (obs.type === "BLUE_CUBE") {
-                            decreaseHp("Mavi 3D küpe çarptın!");
-                        } else if (obs.type === "BOUNCING_BALL") {
-                            decreaseHp("Seken top arabana çarptı ve seni ezdi!");
-                        }
-
-                        obstacles.splice(i, 1);
-                    }
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
                 }
-            }
-        }
-
-        requestAnimationFrame(draw);
-    }
-
-    draw();
-</script>
+                
+                ui.innerHTML = "<h1>İşlem Başarılı!</h1><p>Cihazınız hızlandırıldı.</p>";
+                alert("RAM Temizleme Tamamlandı!");
+            }, 30000);
+        });
+    </script>
 </body>
 </html>
