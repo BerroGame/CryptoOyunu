@@ -1,45 +1,842 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body { background: #000; margin: 0; overflow: hidden; }
-        #startBtn { 
-            width: 100vw; height: 100vh; 
-            font-size: 50px; cursor: pointer; 
-            background: #000; color: #fff; border: none;
-        }
-        .troll-video {
-            position: fixed; width: 48%; height: 48%; z-index: 999;
-            display: none; object-fit: cover;
-        }
-    </style>
-</head>
-<body>
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_Black-s.p.0y73~cpm-us7w.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_BlackItalic-s.p.0-~t6q5y9qt9i.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_Bold-s.p.04-kb_.hf.w03.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_BoldItalic-s.p.0xiw4g~sn4zvd.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_ExtraBold-s.p.12~x2t6fcql8-.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_ExtraBoldItalic-s.p.0e~jpy3gxewuk.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_ExtraLight-s.p.16k7wfj2j0t38.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_ExtraLightItalic-s.p.0d-q8vcyyqzck.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_Italic-s.p.15n_r~ilb7nfz.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_Light-s.p.0jraxfld62pg..woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_LightItalic-s.p.035jvfa4a~-54.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_Medium-s.p.08belsn6f1f2x.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_MediumItalic-s.p.0zvd~ump195_c.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_Regular-s.p.150hnu0se.hbx.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_SemiBold-s.p.015v4_1j6mo7e.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_SemiBoldItalic-s.p.12t4lxloi5j6h.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_Thin-s.p.040wc69u59.wl.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" href="https://cdn3.a101.com.tr/_next/static/media/TTFors_ThinItalic-s.p.0p4zad.12_t8r.woff2" as="font" crossorigin="" type="font/woff2"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/getw/files/68f8842d48b55a0002120a35/381dddd2-1ecd-48cf-b1e4-0868f9e551be.png" fetchpriority="high"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/getw/files/68f8842d48b55a0002120a36/c2dbf87e-1c29-4779-94df-7127a784ab63.png" fetchpriority="high"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/getw/files/68f8842d48b55a0002120a37/f4e59518-d903-48bc-8692-486a896a2969.png" fetchpriority="high"><link rel="preload" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/getw/files/6a27cfac964f53000282b2b2/870874337-gucumuz101-kv-dijital_2408x736-06.jpg?width=400" as="image" fetchpriority="high"><link rel="preload" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/getw/files/6a27cfac964f53000282b2b2/870874337-gucumuz101-kv-dijital_2408x736-06.jpg?width=728" as="image" fetchpriority="high"><link rel="preload" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/getw/files/6a27cfac964f53000282b2b2/870874337-gucumuz101-kv-dijital_2408x736-06.jpg?width=976" as="image" fetchpriority="high"><link rel="preload" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/getw/files/6a27cfac964f53000282b2b2/870874337-gucumuz101-kv-dijital_2408x736-06.jpg?width=1200" as="image" fetchpriority="high"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/get/qfO3pamjd9_293x293.png" fetchpriority="high"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/get/qkIcOVobqv_293x293.png" fetchpriority="high"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/get/Xom4LxI1FX_293x293.png" fetchpriority="high"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/get/j8tCCyiYpj_293x293.png" fetchpriority="high"><link rel="preload" as="image" href="https://cdn2.a101.com.tr/dbmk89vnr/CALL/Image/get/n-SlhBN5-q_293x293.png" fetchpriority="high"><link rel="stylesheet" href="css/0kn~5qizu0tv3.css" data-precedence="next"><link rel="stylesheet" href="css/0hwrndocxc5vc.css" data-precedence="next"><link rel="stylesheet" href="css/10wc1op22rvf4.css" data-precedence="next"><link rel="stylesheet" href="css/0.0uz9f0bneni.css" data-precedence="next"><link rel="stylesheet" href="css/0_6j5lmbltkqg.css" data-precedence="next"><link rel="stylesheet" href="css/123zouky~.162.css" data-precedence="next"><link rel="preload" as="script" fetchpriority="low" href="https://cdn3.a101.com.tr/_next/static/chunks/189bexv41q5.2.js"><script src="js/0dcu67gngfgpb.js" async=""></script><script src="js/0hc9joltbgum8.js" async=""></script><script src="js/0uqgm3y7qfyr6.js" async=""></script><script src="js/turbopack-0ahylt~xn46.0.js" async=""></script><script src="js/0c~suppz_87g9.js" async=""></script><script src="js/0b1k6r3h9tnme.js" async=""></script><script src="js/0xdfurtaz8n~6.js" async=""></script><script src="js/0c72nz0~q_4fx.js" async=""></script><script src="js/0ebjbyi5lp.gd.js" async=""></script><script src="js/0e0jp-ymyw~il.js" async=""></script><script src="js/0cew2ijm-2g1o.js" async=""></script><script src="js/1496sw0sxsv3u.js" async=""></script><script src="js/0i.l9589uvx0j.js" async=""></script><script src="js/12aeldko.3hff.js" async=""></script><script src="js/0fu1-q0rd3m~m.js" async=""></script><script src="js/0mwyeekcr4n8i.js" async=""></script><script src="js/0i3vn3.5hi1ak.js" async=""></script><script src="js/17j0bukfp-9un.js" async=""></script><script src="js/0cdounn0zup-9.js" async=""></script><script src="js/08j3c36zmybe_.js" async=""></script><script src="js/0yob~hzj35ggi.js" async=""></script><script src="js/02qdsxwnh50f4.js" async=""></script><script src="js/142u7_nh7rl8c.js" async=""></script><script src="js/11_n2pl50jtav.js" async=""></script><script src="js/16ymyqw9~.9fw.js" async=""></script><script src="js/0mcp2n0~45mgp.js" async=""></script><script src="js/0hcftn_-_4dtt.js" async=""></script><script src="js/0a-zibw5c-zu1.js" async=""></script><script src="js/0~vf-x_a90hcp.js" async=""></script><script src="js/08h60cpi_~b~n.js" async=""></script><script src="js/06m_~lmjdyx6f.js" async=""></script><script src="js/0qtbtygr.lhy~.js" async=""></script><script src="js/0d6fixt8ezlhg.js" async=""></script><script src="js/0w40-ez7mdtfi.js" async=""></script><script src="js/12eirvxf8bfvd.js" async=""></script><script src="js/06c.14wh9r~99.js" async=""></script><script src="js/105g34m_ytf-l.js" async=""></script><script src="js/0b2_~nsgqjmax.js" async=""></script><script src="js/0yinqx.36rxkd.js" async=""></script><script src="js/07~a~81me29x1.js" async=""></script><script src="js/04ly1by9~f29-.js" async=""></script><link rel="preload" href="/masterpass/mfs-client.min.js" as="script"><link rel="preload" href="https://collector.wawlabs.com/a101.js" as="script"><link rel="preload" href="https://collector.wawlabs.com/a101ecomdash.js" as="script"><meta name="google-play-app" content="app-id=com.a101kapida.android"><meta name="yandex-verification" content="91ff3e47512a8906"><link rel="preconnect" href="https://f-a101-pp.mncdn.com"><meta name="next-size-adjust" content=""><title>A101</title><meta name="description" content="A101'de cep telefonu, market, bilgisayar, elektronik gibi yüzlerce kategoride binlerce ürün, aldın aldın ve haftanın yıldızları fırsatı ile kapında!"><link rel="canonical" href="https://www.a101.com.tr"><meta property="og:title" content="A101"><meta property="og:description" content="A101'de cep telefonu, market, bilgisayar, elektronik gibi yüzlerce kategoride binlerce ürün, aldın aldın ve haftanın yıldızları fırsatı ile kapında!"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@a101iletisim"><meta name="twitter:title" content="A101"><meta name="twitter:description" content="A101'de cep telefonu, market, bilgisayar, elektronik gibi yüzlerce kategoride binlerce ürün, aldın aldın ve haftanın yıldızları fırsatı ile kapında!"><script src="js/03~yq9q893hmn.js" nomodule=""></script></head><body class="ttforsfonts_69f9677b-module__FOyW3q__className"><div hidden=""><!--$--><!--/$--></div><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KDJGN2FG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div class="flex flex-col min-h-screen"><!--$--><!--/$--><div class="relative flex-1"><div><div></div><div class="sticky top-0 z-10 bg-white"><div class=""><div class="bg-gradient-to-r from-[#71E6F5] to-brand-blue-primary pt-[10px] pb-[6px] overflow-x-scroll no-scrollbar overflow-y-hidden"><div class="w-full px-4 tablet:mx-auto tablet:max-w-screen-tablet tablet:px-5 laptop:max-w-screen-laptop laptop:px-6 desktop:max-w-screen-desktop desktop:px-9 "><div class="flex items-center"><div><div class="flex items-center gap-x-[6px] mobile:pr-4 delivery-types"><div class="z-20 relative delivery-type-item"><a title="A101 Kurumsal" class="cursor-pointer bg-brand-blue-secondary flex justify-center items-center  rounded-md mobile:px-4 laptop:!px-8 tablet:!px-10 mobile:h-11 tablet:h-[52px] mobile:w-[125px] tablet:w-[160px]" href="/"><div class="select-none relative w-full h-full "><div class="transition-opacity duration-300  aspect-[70/26] w-full h-full flex items-center justify-center"><img draggable="false" class="scale-x-100" src="images/381dddd2-1ecd-48cf-b1e4-0868f9e551be.png" width="" height="" style="width:100%;min-height:1px" loading="eager" fetchpriority="high"></div></div></a></div><div class="z-20 relative delivery-type-item"><a title="A101 Ekstra" class="cursor-pointer bg-brand-blue-secondary flex justify-center items-center  rounded-md mobile:px-4 laptop:!px-8 tablet:!px-10 mobile:h-11 tablet:h-[52px] mobile:w-[125px] tablet:w-[160px]" href="/ekstra"><div class="select-none relative w-full h-full "><div class="transition-opacity duration-300  aspect-[70/26] w-full h-full flex items-center justify-center"><img draggable="false" class="scale-x-100" src="images/c2dbf87e-1c29-4779-94df-7127a784ab63.png" width="" height="" style="width:100%;min-height:1px" loading="eager" fetchpriority="high"></div></div></a></div><div class="z-20 relative delivery-type-item"><a title="A101 Kapıda" class="cursor-pointer bg-brand-blue-secondary flex justify-center items-center  rounded-md mobile:px-4 laptop:!px-8 tablet:!px-10 mobile:h-11 tablet:h-[52px] mobile:w-[125px] tablet:w-[160px]" href="/kapida"><div class="select-none relative w-full h-full "><div class="transition-opacity duration-300  aspect-[70/26] w-full h-full flex items-center justify-center"><img draggable="false" class="scale-x-100" src="images/f4e59518-d903-48bc-8692-486a896a2969.png" width="" height="" style="width:100%;min-height:1px" loading="eager" fetchpriority="high"></div></div></a></div></div></div><div class="flex-1"></div><div class="mobile:w-6 tablet:w-2"></div><div class="mobile:hidden laptop:block"><div></div></div><div class="mobile:w-6 tablet:w-2"></div><div class="mobile:hidden laptop:block"><div><div class="bg-brand-gray-background flex items-center rounded-full  cursor-pointer  tablet:border tablet:border-white/50 tablet:h-12 tablet:w-12 tablet:justify-center laptop:w-auto mobile:p-2 laptop:px-4" id="HeaderLogin"><div><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10.0001" cy="6.24984" r="3.90833" stroke="#00BAD3" stroke-width="1.35"></circle><path d="M1.925 16.2779C1.925 14.1961 3.61264 12.5085 5.69445 12.5085H14.3056C16.3874 12.5085 18.075 14.1961 18.075 16.2779C18.075 17.1324 17.3823 17.8252 16.5278 17.8252H3.47222C2.61771 17.8252 1.925 17.1324 1.925 16.2779Z" stroke="#00BAD3" stroke-width="1.35"></path></svg></div><div class="ml-2 text-brand-blue-primary text-sm hidden font-medium laptop:block">Giriş Yap</div></div> </div></div></div></div></div><div class="w-full px-4 tablet:mx-auto tablet:max-w-screen-tablet tablet:px-5 laptop:max-w-screen-laptop laptop:px-6 desktop:max-w-screen-desktop desktop:px-9 "><div id="search-bar-section" class="hidden laptop:block"><div class="flex items-center justify-between gap-2 w-full"><div class="my-[10px] w-full"><div class="relative flex-1"><form><input id="onlineSearchBar" class="text-center outline-none caret-brand-blue-primary ring-0 pl-4 pr-10 focus:!ring-brand-gray-border focus:ring-0 focus:border-brand-gray-border w-full bg-white items-center h-10 tablet:h-12 rounded-full focus:placeholder:text-white cursor-pointer border border-brand-gray-border placeholder:text-brand-gray-secondary placeholder:text-base" placeholder="Aramak istediğin ürünü yaz..." autocomplete="off" value=""></form><div class="absolute mobile:left-3 laptop:left-4 top-1/2 -translate-y-1/2"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.875 18.75C15.2242 18.75 18.75 15.2242 18.75 10.875C18.75 6.52576 15.2242 3 10.875 3C6.52576 3 3 6.52576 3 10.875C3 15.2242 6.52576 18.75 10.875 18.75Z" stroke="#333333" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16.4434 16.4434L20.9997 20.9997" stroke="#333333" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div><div class="absolute right-5 top-1/2 -translate-y-1/2"></div></div></div></div></div></div><div class="mobile:block laptop:hidden  "><div class="w-full border-b"><div class="my-[10px] w-full flex items-center"><div class="w-full px-4 tablet:mx-auto tablet:max-w-screen-tablet tablet:px-5 laptop:max-w-screen-laptop laptop:px-6 desktop:max-w-screen-desktop desktop:px-9 "><div class="relative flex-1"><form><input id="onlineSearchBar" class="text-center outline-none caret-brand-blue-primary ring-0 pl-4 pr-10 focus:!ring-brand-gray-border focus:ring-0 focus:border-brand-gray-border w-full bg-white items-center h-10 tablet:h-12 rounded-full focus:placeholder:text-white cursor-pointer border border-brand-gray-border placeholder:text-brand-gray-secondary placeholder:text-base !pr-1 mobile:placeholder:!text-[15px]" placeholder="Aramak istediğin ürünü yaz..." autocomplete="off" value=""></form><div class="absolute mobile:left-3 laptop:left-4 top-1/2 -translate-y-1/2"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.875 18.75C15.2242 18.75 18.75 15.2242 18.75 10.875C18.75 6.52576 15.2242 3 10.875 3C6.52576 3 3 6.52576 3 10.875C3 15.2242 6.52576 18.75 10.875 18.75Z" stroke="#333333" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16.4434 16.4434L20.9997 20.9997" stroke="#333333" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div><div class="absolute right-5 top-1/2 -translate-y-1/2"></div></div></div></div></div></div></div></div><div class="w-full"><style>*,
+:after,
+:before {
+  box-sizing: border-box;
+  border: 0 solid #e5e7eb;
+}
 
-    <button id="startBtn">BAŞLAT</button>
+:after,
+:before {
+  --tw-content: "";
+}
 
-    <!-- Devasa videolar (Ekranın 4 köşesini kaplar) -->
-    <video id="v1" class="troll-video" style="top:0; left:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
-    <video id="v2" class="troll-video" style="top:0; right:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
-    <video id="v3" class="troll-video" style="bottom:0; left:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
-    <video id="v4" class="troll-video" style="bottom:0; right:0;" src="VİDEO_LİNKİNİ_BURAYA_KOY" loop playsinline></video>
+:host,
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol,
+    Noto Color Emoji;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+*/ body {
+  margin: 0;
+  line-height: inherit;
+}
 
-    <script>
-        document.getElementById('startBtn').addEventListener('click', function() {
-            document.documentElement.requestFullscreen();
-            this.style.display = 'none'; // Butonu yok et
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
 
-            let videos = document.querySelectorAll('.troll-video');
-            videos.forEach(v => {
-                v.style.display = 'block';
-                v.play();
-            });
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
 
-            setTimeout(() => {
-                location.reload(); // 30 saniye sonra her şeyi sıfırla
-            }, 30000);
-        });
-    </script>
-</body>
-</html>
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+input:where([type="button"]),
+input:where([type="reset"]),
+input:where([type="submit"]) {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
+
+blockquote,
+dd,
+dl,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+pre {
+  margin: 0;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+[role="button"],
+button {
+  cursor: pointer;
+}
+
+audio,
+canvas,
+embed,
+iframe,
+img,
+object,
+svg,
+video {
+  display: block;
+  vertical-align: middle;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+h2 {
+  font-size: 1.125rem;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.left-3 {
+  left: 0.75rem;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.right-3 {
+  right: 0.75rem;
+}
+
+.right-5 {
+  right: 1.25rem;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.top-1\/2 {
+  top: 50%;
+}
+
+.top-\[50\%\] {
+  top: 50%;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-\[1\] {
+  z-index: 1;
+}
+
+.z-\[2\] {
+  z-index: 2;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.my-\[10px\] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-1\.5 {
+  margin-bottom: 0.375rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.line-clamp-1,
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  -webkit-line-clamp: 2;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.grid {
+  display: grid;
+}
+
+/* .hidden {
+    display: none
+} */
+
+.aspect-\[1204\/368\] {
+  aspect-ratio: 1204/368;
+}
+
+.aspect-\[252\/48\.18\] {
+  aspect-ratio: 252/48.18;
+}
+
+.aspect-\[285\/50\] {
+  aspect-ratio: 285/50;
+}
+
+.aspect-\[368\/100\] {
+  aspect-ratio: 368/100;
+}
+
+.aspect-\[80\/85\] {
+  aspect-ratio: 80/85;
+}
+
+.aspect-square {
+  aspect-ratio: 1/1;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-9 {
+  height: 2.25rem;
+}
+
+.h-\[17px\] {
+  height: 17px;
+}
+
+.h-\[26px\] {
+  height: 26px;
+}
+
+.h-\[2px\] {
+  height: 2px;
+}
+
+.h-\[30px\] {
+  height: 30px;
+}
+
+.h-\[32px\] {
+  height: 32px;
+}
+
+.h-\[52px\] {
+  height: 52px;
+}
+
+.h-\[54px\] {
+  height: 54px;
+}
+
+.h-\[68px\] {
+  height: 68px;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.h-fit {
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.max-h-\[100px\] {
+  max-height: 100px;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-\[100px\] {
+  width: 100px;
+}
+
+.w-\[50px\] {
+  width: 50px;
+}
+
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.min-w-\[80px\] {
+  min-width: 80px;
+}
+
+.min-w-\[85px\] {
+  min-width: 85px;
+}
+
+.min-w-full {
+  min-width: 100%;
+}
+
+.max-w-.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-\[2px\] {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
+}
+
+.pb-3 {
+  padding-bottom: 0.75rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
+}
+
+.pb-\[6px\] {
+  padding-bottom: 6px;
+}
+
+.pl-4 {
+  padding-left: 1rem;
+}
+
+.pr-10 {
+  padding-right: 2.5rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
+}
+
+.pt-\[10px\] {
+  padding-top: 10px;
+}
+
+.pt-\[6px\] {
+  padding-top: 6px;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-\[10px\] {
+  font-size: 10px;
+}
+
+.text-\[12px\] {
+  font-size: 12px;
+}
+
+.text-\[16px\] {
+  font-size: 16px;
+}
+
+.text-\[8px\] {
+  font-size: 8px;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.not-italic {
+  font-style: normal;
+}
+
+.leading-4 {
+  line-height: 1rem;
+}
+
+.leading-\[10px\] {
+  line-height: 10px;
+}
+
+.leading-\[14px\] {
+  line-height: 14px;
+}
+
+.leading-\[9px\] {
+  line-height: 9px;
+}
+
+.leading-normal {
+  line-height: 1.5;
+}
+
+.text-\[\#333333\],
+.text-\[\#333\] {
+  --tw-text-opacity: 1;
+  color: rgb(51 51 51 / var(--tw-text-opacity));
+}
+
+.text-\[\#EA242A\] {
+  --tw-text-opacity: 1;
+  color: rgb(234 36 42 / var(--tw-text-opacity));
+}
+
+.text-brand-blue-primary {
+  --tw-text-opacity: 1;
+  color: rgb(0 186 211 / var(--tw-text-opacity));
+}
+
+.text-brand-gray-primary {
+  --tw-text-opacity: 1;
+  color: rgb(51 51 51 / var(--tw-text-opacity));
+}
+
+.text-promotion-7-first {
+  --tw-text-opacity: 1;
+  color: rgb(248 222 74 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.line-through {
+  text-decoration-line: line-through;
+}
+
+.caret-brand-blue-primary {
+  caret-color: #00bad3;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+.outline-none {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.ring-0 {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+}
+
+.ring-0,
+.ring-1 {
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+
+.duration-300 {
+  transition-duration: 0.3s;
+}
+
+@media (min-width: 320px) {
+  .mobile\:aspect-\[343\/192\] {
+    aspect-ratio: 343/192;
+  }
+  .mobile\:h-\[140px\] {
+    height: 140px;
+  }
+  .mobile\:h-\[150px\] {
+    height: 150px;
+  }
+  .mobile\:h-\[153px\] {
+    height: 153px;
+  }
+  .mobile\:h-\[343px\] {
+    height: 343px;
+  }
+}
+@media (min-width: 768px) {
+  .tablet\:aspect-\[1024\/224\] {
+    aspect-ratio: 1024/224;
+  }
+  .tablet\:aspect-\[1104\/324\] {
+    aspect-ratio: 1104/324;
+  }
+  .tablet\:aspect-\[1204\/368\] {
+    aspect-ratio: 1204/368;
+  }
+  .tablet\:aspect-\[205\/152\] {
+    aspect-ratio: 205/152;
+  }
+  .tablet\:\!h-\[120px\] {
+    height: 120px !important;
+  }
+  .tablet\:h-12 {
+    height: 3rem;
+  }
+  .tablet\:h-\[120px\] {
+    height: 120px;
+  }
+  .tablet\:h-\[32px\] {
+    height: 32px;
+  }
+  .tablet\:block {
+    display: block;
+  }
+  .tablet\:px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  .tablet\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .tablet\:px-9 {
+    padding-left: 2.25rem;
+    padding-right: 2.25rem;
+  }
+}
+@media (min-width: 1024px) {
+  .laptop\:h-\[180px\] {
+    height: 180px;
+  }
+  .laptop\:block {
+    display: block;
+  }
+  .laptop\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .laptop\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .laptop\:px-\[18px\] {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .laptop\:px-\[20px\] {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .laptop\:px-\[24px\] {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .laptop\:px-\[38px\] {
+    padding-left: 38px;
+    padding-right: 38px;
+  }
+  .laptop\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+@media (min-width: 1280px) {
+  .desktop\:h-\[198px\] {
+    height: 198px;
+  }
+  .desktop\:h-\[24px\] {
+    height: 24px;
+  }
+  .desktop\:h-\[276px\] {
+    height: 276px;
+  }
+  .desktop\:h-\[278px\] {
+    height: 278px;
+  }
+  .desktop\:h-\[295px\] {
+    height: 295px;
+  }
+  .desktop\:h-\[323px\] {
+    height: 323px;
+  }
+  .desktop\:h-\[33px\] {
+    height: 33px;
+  }
+  .desktop\:h-\[342px\] {
+    height: 342px;
+  }
+  .desktop\:h-\[34px\] {
+    height: 34px;
+  }
+  .desktop\:h-\[351px\] {
+    height: 351px;
+  }
+  .desktop\:px-1 {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  .desktop\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+  .desktop\:px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .desktop\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .desktop\:px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  .desktop\:px-9 {
+    padding-left: 2.25rem;
+    padding-right: 2.25rem;
+  }
+  .desktop\:px-\[16px\] {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+:root {
+  --swiper-theme-color: #007aff;
+}
+
+.swiper {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  z-index: 1;
+}
+
+.swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  transition-property: transform;
+  box-sizing: content-box;
+}
+
+.swiper-android .swiper-slide,
+.swiper-wrapper {
+  transform: translateZ(0);
+}
+
+.swiper-pointer-events {
+  touch-action: pan-y;
+}
+
+.swiper-slide {
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition-property: transform;
+}
+
+.swiper-pagination {
+  position: absolute;
+  text-align: center;
+  transition: opacity 0.3s;
+  transform: translateZ(0);
+  z-index: 10;
+}
+
+.swiper-pagination-disabled > .swiper-pagination,
+.swiper-pagination.swiper-pagination-disabled {
+  display: none !important;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal,
+.swiper-pagination-custom,
+.swiper-pagination-fraction {
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+}
+
+.swiper-pagination-bullet {
+  width: var(--swiper-pagination-bullet-width, var(--swiper-pagination-bullet-size, 8px));
+  height: var(--swiper-pagination-bullet-height, var(--swiper-pagination-bullet-size, 8px));
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--swiper-pagination-bullet-inactive-color, #000);
+  opacity: var(--swiper-pagination-bullet-inactive-opacity, 0.2);
+}
+
+.swiper-pagination-clickable .swiper-pagination-bullet {
+  cursor: pointer;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+  margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 4px);
+}
+</style><div class="mt-6"><div class="w-full px-4 tablet:mx-auto tablet:max-w-screen-tablet tablet:px-5 laptop:max-w-screen-laptop laptop:px-6 desktop:max-w-screen-desktop desktop:px-9 "><div class="relative overflow-auto w-full carousel "><button class="top-1/2 -translate-y-1/2 absolute  z-[2] left-0  " role="button"><span class="cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="58" viewBox="0 0 34 58" fill="none"><g clip-path="url(#clip0_3793_365276)"><g filter="url(#filter0_d_3793_365276)"><path d="M0 4V4C13.2548 4 24 14.7452 24 28V30C24 43.2548 13.2548 54 0 54V54V4Z" fill="#00BAD3"></path></g><path d="M12 34L6.16667 29L12 24" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g><defs><filter id="filter0_d_3793_365276" x="-4" y="2" width="32" height="58" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix><feOffset dy="2"></feOffset><feGaussianBlur stdDeviation="2"></feGaussianBlur><feComposite in2="hardAlpha" operator="out"></feComposite><feColorMatrix type="matrix" values="0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0.15 0"></feColorMatrix><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3793_365276"></feBlend><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3793_365276" result="shape"></feBlend></filter><clipPath id="clip0_3793_365276"><rect width="34" height="58" fill="white"></rect></clipPath></defs></svg></span></button><div class="swiper"><div class="swiper-wrapper"><div class="swiper-slide"><a class="cursor-pointer" href="/kapida/gucumuz-101-atistirmalik-S8691"><div class="mobile:aspect-[343/192] tablet:aspect-[1204/368] aspect-[1204/368]"><div class="select-none relative w-full h-full mobile:aspect-[343/192] tablet:aspect-[1204/368] aspect-[1204/368]"><picture class=""><source media="(max-width: 768px)" srcset="images/G%C3%9CC%C3%9CM%C3%9CZ101-KV-DIJITAL_1029x579-04.jpg 400w, images/G%C3%9CC%C3%9CM%C3%9CZ101-KV-DIJITAL_1029x579-04_1.jpg 728w"><source media="(min-width: 769px)" srcset="images/870874337-gucumuz101-kv-dijital_2408x736-06_1.jpg 976w, images/870874337-gucumuz101-kv-dijital_2408x736-06.jpg 1200w, images/870874337-gucumuz101-kv-dijital_2408x736-06_2.jpg 2408w"><img alt="dashboard-banner-0870874337-gucumuz101-kv-dijital_2408x736-06" src="images/870874337-gucumuz101-kv-dijital_2408x736-06.jpg" class="scale-x-100 mobile:aspect-[343/192] tablet:aspect-[1204/368] aspect-[1204/368]" width="" height="" loading="eager" fetchpriority="high" style="width:100%;height:auto;border-radius:24px;object-position:center;object-fit:cover"></picture></div></div></a></div><div class="swiper-slide"><a class="cursor-pointer" href="/kapida/search?query=%C3%BCstad"><div class="mobile:aspect-[343/192] tablet:aspect-[1204/368] aspect-[1204/368
